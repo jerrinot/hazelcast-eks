@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: hazelcast
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: hazelcast
   selector:
     matchLabels:
