@@ -13,7 +13,6 @@ managedNodeGroups:
     volumeSize: 20
     ssh:
       allow: true
-      ssh-public-key: jaromir
     labels: {role: worker}
     tags:
       nodegroup-role: worker
