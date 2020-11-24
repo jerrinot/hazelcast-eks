@@ -1,0 +1,6 @@
+hazelcast:
+  cluster-name: jaromir
+  network:
+    join:
+      kubernetes:
+        enabled: true

@@ -1,0 +1,21 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: jaromir-eks
+  region: eu-central-1
+
+managedNodeGroups:
+  - name: managed-ng-3
+    minSize: 1
+    maxSize: 4
+    desiredCapacity: 2
+    volumeSize: 20
+    ssh:
+      allow: true
+      ssh-public-key: jaromir
+    labels: {role: worker}
+    tags:
+      nodegroup-role: worker
+      #instanceType: m5.8xlarge
+    availabilityZones: ['eu-central-1a']
