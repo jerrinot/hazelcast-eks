@@ -6,10 +6,10 @@ metadata:
   region: eu-central-1
 
 managedNodeGroups:
-  - name: managed-ng-3
+  - name: managed-ng-4
     minSize: 1
     maxSize: 5
-    desiredCapacity: 5
+    desiredCapacity: 2
     volumeSize: 20
     ssh:
       allow: true

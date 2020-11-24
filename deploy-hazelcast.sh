@@ -16,6 +16,7 @@ fi
 nodes=$(kubectl get nodes -o name|wc -l)
 echo Deploying Hazelcast to $nodes nodes
 kubectl create configmap hazelcast-configuration --from-file="$DIR/hazelcast-config.yaml"
+kubectl apply -f "$DIR/rbac.yaml"
 kubectl apply -f "$DIR/hazelcast-statefulset.yaml"
 kubectl scale statefulset hazelcast --replicas=$nodes
 
@@ -35,4 +36,11 @@ for pod in $(kubectl get pods -o jsonpath="{.items[*].metadata.name}"); do \
   kubectl create service nodeport ${pod} --tcp=5701 -o yaml --dry-run=client | kubectl set selector --local -f - "statefulset.kubernetes.io/pod-name=${pod}" -o yaml | kubectl create -f -; \
 done
 
-echo Done
+echo --------------------
+echo Information needed to connect from outside of the cluster
+kubectl cluster-info|grep master
+token_name=$(kubectl get secret -o name|grep hazelcast)
+echo API Token:
+kubectl get "$token_name" -o jsonpath={.data.token} | base64 --decode | xargs echo
+echo Certificate:
+kubectl get "$token_name" -o jsonpath='{.data.ca\.crt}' | base64 --decode

@@ -13,6 +13,7 @@ spec:
       labels:
         app: hazelcast
     spec:
+      serviceAccountName: hazelcast-service-account
       containers:
         - name: hazelcast
           image: hazelcast/hazelcast:4.1
