@@ -8,8 +8,8 @@ metadata:
 managedNodeGroups:
   - name: managed-ng-3
     minSize: 1
-    maxSize: 4
-    desiredCapacity: 2
+    maxSize: 5
+    desiredCapacity: 5
     volumeSize: 20
     ssh:
       allow: true

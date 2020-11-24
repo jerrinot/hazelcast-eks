@@ -18,7 +18,18 @@ echo Deploying Hazelcast to $nodes nodes
 kubectl create configmap hazelcast-configuration --from-file="$DIR/hazelcast-config.yaml"
 kubectl apply -f "$DIR/hazelcast-statefulset.yaml"
 kubectl scale statefulset hazelcast --replicas=$nodes
-kubectl wait --for=condition=Ready pods --all
+
+echo waiting for all replicas to be ready
+ready_replicas=$(kubectl get statefulsets.apps hazelcast -o yaml|grep readyReplicas)
+echo $ready_replicas
+while [[ ! "$ready_replicas" == *"readyReplicas: $nodes"* ]]
+do
+  echo "$ready_replicas out of $nodes"
+  sleep 1
+  ready_replicas=$(kubectl get statefulsets.apps hazelcast -o yaml|grep readyReplicas)
+done
+echo "$ready_replicas out of $nodes"
+
 
 for pod in $(kubectl get pods -o jsonpath="{.items[*].metadata.name}"); do \
   kubectl create service nodeport ${pod} --tcp=5701 -o yaml --dry-run=client | kubectl set selector --local -f - "statefulset.kubernetes.io/pod-name=${pod}" -o yaml | kubectl create -f -; \
